@@ -248,13 +248,13 @@ func main() {
 
 				for i := 0; i < iters; i++ {
 					startX := rand.Intn(1800)
-					startY := rand.Intn(400) + 350
+					startY := rand.Intn(390) + 420
 
 					for i := 0; i < size.X*size.Y; i++ { // 1900x900
 						x := i % size.X
 						y := i / size.X
 
-						if x*y*127%13 > 7 {
+						if x*y*127%13 > 4 {
 							continue
 						}
 
