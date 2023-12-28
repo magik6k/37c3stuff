@@ -243,27 +243,30 @@ func main() {
 			// rand startX, startY
 
 			for {
-				startX := rand.Intn(1800)
-				startY := rand.Intn(400) + 350
-
 				sendBuf = sendBuf[:0]
+				iters := 5
 
-				for i := 0; i < size.X*size.Y; i++ { // 1900x900
-					x := i % size.X
-					y := i / size.X
+				for i := 0; i < iters; i++ {
+					startX := rand.Intn(1800)
+					startY := rand.Intn(400) + 350
 
-					if x*y*127%13 > 10 {
-						continue
+					for i := 0; i < size.X*size.Y; i++ { // 1900x900
+						x := i % size.X
+						y := i / size.X
+
+						if x*y*127%13 > 7 {
+							continue
+						}
+
+						px := image.At(x, y)
+						R, G, B, A := px.RGBA()
+
+						if A == 0 {
+							continue
+						}
+
+						sendBuf = append(sendBuf, fmt.Sprintf("PX %d %d %02x%02x%02x\n", startX+x, startY+y, R>>8, G>>8, B>>8)...)
 					}
-
-					px := image.At(x, y)
-					R, G, B, A := px.RGBA()
-
-					if A == 0 {
-						continue
-					}
-
-					sendBuf = append(sendBuf, fmt.Sprintf("PX %d %d %02x%02x%02x\n", startX+x, startY+y, R>>8, G>>8, B>>8)...)
 				}
 
 				// get a conn
