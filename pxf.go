@@ -251,7 +251,7 @@ func main() {
 
 				for i := 0; i < iters; i++ {
 					startX := rand.Intn(1800)
-					startY := rand.Intn(390) + 420
+					startY := rand.Intn(1000)
 
 					for i := 0; i < size.X*size.Y; i++ { // 1900x900
 						x := i % size.X
