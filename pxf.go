@@ -263,7 +263,7 @@ func main() {
 				sendBuf = sendBuf[:0]
 				iters := 5
 
-				max := int(maxY.Load())
+				max := int(maxY.Load()) + 1
 
 				for i := 0; i < iters; i++ {
 					startX := rand.Intn(1800)
