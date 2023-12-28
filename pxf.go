@@ -311,7 +311,7 @@ func main() {
 						x := i % size.X
 						y := i / size.X
 
-						if x*y*127%13 > 9 {
+						if x*y*127%13 > 4 {
 							continue
 						}
 
