@@ -23,7 +23,7 @@ func main() {
 		for {
 			time.Sleep(1 * time.Millisecond)
 			n := maxY.Add(3)
-			if n > 800 {
+			if n > 700 {
 				maxY.Store(400)
 			}
 		}
