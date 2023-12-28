@@ -351,6 +351,7 @@ func main() {
 						connLk.Unlock()
 						connCond.Signal()
 					}()
+					continue
 				}
 
 				connLk.Lock()
