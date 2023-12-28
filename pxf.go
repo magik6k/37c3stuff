@@ -23,8 +23,8 @@ func main() {
 		for {
 			time.Sleep(1 * time.Millisecond)
 			n := maxY.Add(3)
-			if n > 1000 {
-				maxY.Store(0)
+			if n > 800 {
+				maxY.Store(400)
 			}
 		}
 	}()
