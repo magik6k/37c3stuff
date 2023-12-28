@@ -213,8 +213,20 @@ func main() {
 
 			dst := "151.217.15.79"
 
-		retry:
+			/*retry:
 			conn, err := net.DialTCP("tcp", &net.TCPAddr{IP: net.ParseIP(src)}, &net.TCPAddr{IP: net.ParseIP(dst), Port: 1337})
+			if err != nil {
+				time.Sleep(1 * time.Millisecond)
+				goto retry
+			}
+			*/
+			dialer := net.Dialer{
+				Timeout:   70 * time.Millisecond, // Set the connection timeout to 70 milliseconds
+				LocalAddr: &net.TCPAddr{IP: net.ParseIP(src)},
+			}
+
+		retry:
+			conn, err := dialer.Dial("tcp", net.JoinHostPort(dst, "1337"))
 			if err != nil {
 				time.Sleep(1 * time.Millisecond)
 				goto retry
@@ -222,11 +234,11 @@ func main() {
 
 			fmt.Println("connected to", conn.RemoteAddr())
 
-			if err := conn.SetNoDelay(true); err != nil {
+			if err := conn.(*net.TCPConn).SetNoDelay(true); err != nil {
 				panic(err)
 			}
 
-			file, err := conn.File()
+			file, err := conn.(*net.TCPConn).File()
 			if err != nil {
 				fmt.Println("Error retrieving file descriptor:", err)
 				os.Exit(1)
