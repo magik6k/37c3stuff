@@ -8,12 +8,26 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"sync/atomic"
+	"time"
 
 	_ "image/jpeg"
 	_ "image/png"
 )
 
+var maxY atomic.Int32
+
 func main() {
+	go func() {
+		for {
+			time.Sleep(1 * time.Millisecond)
+			n := maxY.Add(1)
+			if n > 1000 {
+				maxY.Store(0)
+			}
+		}
+	}()
+
 	f, err := os.Open("img.png")
 	if err != nil {
 		panic(err)
@@ -249,9 +263,12 @@ func main() {
 				sendBuf = sendBuf[:0]
 				iters := 5
 
+				max := int(maxY.Load())
+
 				for i := 0; i < iters; i++ {
 					startX := rand.Intn(1800)
-					startY := rand.Intn(1000)
+
+					startY := rand.Intn(1000-max) + max
 
 					for i := 0; i < size.X*size.Y; i++ { // 1900x900
 						x := i % size.X
