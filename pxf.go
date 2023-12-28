@@ -337,7 +337,52 @@ func main() {
 
 				_, err := conn.Write(sendBuf)
 				if err != nil {
-					panic(err)
+					// bad conn
+					go func() {
+						conn.Close()
+						la := conn.(*net.TCPConn).LocalAddr()
+						ra := conn.(*net.TCPConn).RemoteAddr()
+
+						dialer := net.Dialer{
+							Timeout:   70 * time.Millisecond, // Set the connection timeout to 70 milliseconds
+							LocalAddr: &net.TCPAddr{IP: net.ParseIP(la.String())},
+						}
+
+					retry:
+						conn, err := dialer.Dial("tcp", ra.String())
+						if err != nil {
+							time.Sleep(1 * time.Millisecond)
+							goto retry
+						}
+
+						fmt.Println("connected to", conn.RemoteAddr())
+
+						if err := conn.(*net.TCPConn).SetNoDelay(true); err != nil {
+							panic(err)
+						}
+
+						file, err := conn.(*net.TCPConn).File()
+						if err != nil {
+							fmt.Println("Error retrieving file descriptor:", err)
+							os.Exit(1)
+						}
+						//defer file.Close()
+
+						fd := int(file.Fd())
+
+						// Set the TOS field
+						// For example, set TOS to 0x28, which is a common value for AF41 (Assured Forwarding)
+						err = syscall.SetsockoptInt(fd, syscall.IPPROTO_IP, syscall.IP_TOS, 0x28)
+						if err != nil {
+							fmt.Println("Error setting TOS:", err)
+							os.Exit(1)
+						}
+
+						connLk.Lock()
+						conns = append(conns, conn)
+						connLk.Unlock()
+						connCond.Signal()
+					}()
 				}
 
 				connLk.Lock()
