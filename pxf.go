@@ -318,19 +318,19 @@ func main() {
 						}
 
 					retry:
-						conn, err := dialer.Dial("tcp", ra.String())
+						nconn, err := dialer.Dial("tcp", ra.String())
 						if err != nil {
 							time.Sleep(1 * time.Millisecond)
 							goto retry
 						}
 
-						fmt.Println("connected to", conn.RemoteAddr())
+						fmt.Println("reconnected to", nconn.RemoteAddr())
 
-						if err := conn.(*net.TCPConn).SetNoDelay(true); err != nil {
+						if err := nconn.(*net.TCPConn).SetNoDelay(true); err != nil {
 							panic(err)
 						}
 
-						file, err := conn.(*net.TCPConn).File()
+						file, err := nconn.(*net.TCPConn).File()
 						if err != nil {
 							fmt.Println("Error retrieving file descriptor:", err)
 							os.Exit(1)
@@ -347,7 +347,7 @@ func main() {
 						}
 
 						connLk.Lock()
-						conns = append(conns, conn)
+						conns = append(conns, nconn)
 						connLk.Unlock()
 						connCond.Signal()
 					}()
