@@ -229,6 +229,7 @@ func main() {
 			conn, err := dialer.Dial("tcp", net.JoinHostPort(dst, "1337"))
 			if err != nil {
 				time.Sleep(1 * time.Millisecond)
+				fmt.Printf("retrying %s: %s\n", src, err)
 				goto retry
 			}
 
