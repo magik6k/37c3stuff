@@ -22,7 +22,7 @@ func main() {
 	go func() {
 		for {
 			time.Sleep(1 * time.Millisecond)
-			n := maxY.Add(3)
+			n := maxY.Add(5)
 			if n > 1000 {
 				maxY.Store(10)
 			}
