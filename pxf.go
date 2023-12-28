@@ -137,9 +137,9 @@ func main() {
 
 		src := sourceIPs[i%len(sourceIPs)]
 
-		dst := "151.217.15.79:1337"
+		dst := "151.217.15.79"
 
-		conn, err := net.DialTCP("tcp", &net.TCPAddr{IP: net.ParseIP(src)}, &net.TCPAddr{IP: net.ParseIP(dst)})
+		conn, err := net.DialTCP("tcp", &net.TCPAddr{IP: net.ParseIP(src)}, &net.TCPAddr{IP: net.ParseIP(dst), Port: 1337})
 		if err != nil {
 			panic(err)
 		}
