@@ -221,7 +221,7 @@ func main() {
 			}
 			*/
 			dialer := net.Dialer{
-				Timeout:   70 * time.Millisecond, // Set the connection timeout to 70 milliseconds
+				Timeout:   170 * time.Millisecond, // Set the connection timeout to 70 milliseconds
 				LocalAddr: &net.TCPAddr{IP: net.ParseIP(src)},
 			}
 
@@ -345,7 +345,7 @@ func main() {
 						ra := conn.(*net.TCPConn).RemoteAddr()
 
 						dialer := net.Dialer{
-							Timeout:   70 * time.Millisecond, // Set the connection timeout to 70 milliseconds
+							Timeout:   170 * time.Millisecond, // Set the connection timeout to 70 milliseconds
 							LocalAddr: &net.TCPAddr{IP: net.ParseIP(la.String())},
 						}
 
