@@ -185,7 +185,8 @@ func main() {
 151.217.1.208
 151.217.1.234
 151.217.1.229
-151.217.1.206`
+151.217.1.206
+151.217.1.230`
 
 	sourceIPs := strings.Split(sources, "\n")
 
@@ -202,10 +203,6 @@ func main() {
 	go func() {
 
 		for i := 0; i < nconn; i++ {
-			/*conn, err := net.Dial("tcp", "151.217.15.79:1337")
-			if err != nil {
-				panic(err)
-			}*/
 
 			src := sourceIPs[i%len(sourceIPs)]
 			// trim
@@ -213,13 +210,6 @@ func main() {
 
 			dst := "151.217.15.90"
 
-			/*retry:
-			conn, err := net.DialTCP("tcp", &net.TCPAddr{IP: net.ParseIP(src)}, &net.TCPAddr{IP: net.ParseIP(dst), Port: 1337})
-			if err != nil {
-				time.Sleep(1 * time.Millisecond)
-				goto retry
-			}
-			*/
 			dialer := net.Dialer{
 				Timeout:   170 * time.Millisecond, // Set the connection timeout to 70 milliseconds
 				LocalAddr: &net.TCPAddr{IP: net.ParseIP(src)},
@@ -272,28 +262,6 @@ func main() {
 			connWg.Wait()
 
 			sendBuf := make([]byte, 0, 1900*300*8)
-
-			/*for i := 0; i < 1900*300; i++ { // 1900x900
-				x := i % 1900
-				y := offy*300 + i/1900
-
-				x = 1920 - x - 1
-				y = 1080 - y - 1
-				/*_, err := conn.Write([]byte(pixels[x][y]))
-				if err != nil {
-					panic(err)
-				}* /
-
-				// trim to image size
-				if x >= 2*size.X || y >= 3*size.Y {
-					continue
-				}
-				if x < size.X || y < size.Y*2 {
-					continue
-				}
-
-				sendBuf = append(sendBuf, pixels[x][y]...)
-			}*/
 
 			// rand startX, startY
 
@@ -367,7 +335,6 @@ func main() {
 							fmt.Println("Error retrieving file descriptor:", err)
 							os.Exit(1)
 						}
-						//defer file.Close()
 
 						fd := int(file.Fd())
 
