@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"syscall"
 	"time"
 
 	_ "image/jpeg"
@@ -213,6 +214,27 @@ func main() {
 		conn, err := net.DialTCP("tcp", &net.TCPAddr{IP: net.ParseIP(src)}, &net.TCPAddr{IP: net.ParseIP(dst), Port: 1337})
 		if err != nil {
 			panic(err)
+		}
+
+		if err := conn.SetNoDelay(true); err != nil {
+			panic(err)
+		}
+
+		file, err := conn.File()
+		if err != nil {
+			fmt.Println("Error retrieving file descriptor:", err)
+			os.Exit(1)
+		}
+		//defer file.Close()
+
+		fd := int(file.Fd())
+
+		// Set the TOS field
+		// For example, set TOS to 0x28, which is a common value for AF41 (Assured Forwarding)
+		err = syscall.SetsockoptInt(fd, syscall.IPPROTO_IP, syscall.IP_TOS, 0x28)
+		if err != nil {
+			fmt.Println("Error setting TOS:", err)
+			os.Exit(1)
 		}
 
 		conns = append(conns, conn)
