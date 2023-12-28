@@ -160,7 +160,7 @@ func main() {
 					}*/
 
 	nwork := 40
-	nconn := 1
+	nconn := 3
 
 	sources := `151.217.1.230
 151.217.1.242
