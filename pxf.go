@@ -211,7 +211,7 @@ func main() {
 			// trim
 			src = strings.TrimSpace(src)
 
-			dst := "151.217.15.79"
+			dst := "151.217.15.90"
 
 			/*retry:
 			conn, err := net.DialTCP("tcp", &net.TCPAddr{IP: net.ParseIP(src)}, &net.TCPAddr{IP: net.ParseIP(dst), Port: 1337})
