@@ -29,135 +29,32 @@ func main() {
 		}
 	}()
 
-	f, err := os.Open("img.png")
-	if err != nil {
-		panic(err)
+	var images []image.Image
+	var sizes []image.Point
+
+	loadimg := func(p string) {
+		f, err := os.Open(p)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+		im, _, err := image.Decode(f)
+		if err != nil {
+			panic(err)
+		}
+
+		bounds := im.Bounds()
+		size := bounds.Size()
+
+		images = append(images, im)
+		sizes = append(sizes, size)
 	}
-	defer f.Close()
-	image, _, err := image.Decode(f)
-	if err != nil {
-		panic(err)
-	}
 
-	bounds := image.Bounds()
-	size := bounds.Size()
-
-	fmt.Printf("size: %v\n", size)
-
-	const sizeX, sizeY = 1920, 1080
-	/*
-					var pixels [sizeX][sizeY]string
-					for x := 0; x < sizeX; x++ {
-						for y := 0; y < sizeY; y++ {
-							ix := x % (size.X)
-							iy := y % (size.Y)
-
-							if ix < 3 || iy < 3 {
-								//pixels[x][y] = "PX 0 0 ff00ff\n"
-								pixels[x][y] = fmt.Sprintf("PX %d %d ff00ff\n", x, y)
-								continue
-							}
-
-							ix -= 3
-							iy -= 3
-
-							col := image.At(ix, iy)
-							R, G, B, A := col.RGBA()
-							if A == 0 {
-								continue
-							}
-
-				ip link add link ens0s1 ens0s1:0 type macvlan
-
-			ip link add mv1 link enp0s1 type macvlan mode bridge
-			ip link add mv2 link enp0s1 type macvlan mode bridge
-			ip link add mv3 link enp0s1 type macvlan mode bridge
-			ip link add mv4 link enp0s1 type macvlan mode bridge
-			ip link add mv5 link enp0s1 type macvlan mode bridge
-			ip link add mv6 link enp0s1 type macvlan mode bridge
-			ip link add mv7 link enp0s1 type macvlan mode bridge
-			ip link add mv8 link enp0s1 type macvlan mode bridge
-			ip link add mv9 link enp0s1 type macvlan mode bridge
-			ip link add mv10 link enp0s1 type macvlan mode bridge
-			ip link add mv11 link enp0s1 type macvlan mode bridge
-			ip link add mv12 link enp0s1 type macvlan mode bridge
-			ip link add mv13 link enp0s1 type macvlan mode bridge
-			ip link add mv14 link enp0s1 type macvlan mode bridge
-			ip link add mv15 link enp0s1 type macvlan mode bridge
-			ip link add mv16 link enp0s1 type macvlan mode bridge
-			ip link add mv17 link enp0s1 type macvlan mode bridge
-			ip link add mv18 link enp0s1 type macvlan mode bridge
-			ip link add mv19 link enp0s1 type macvlan mode bridge
-			ip link add mv20 link enp0s1 type macvlan mode bridge
-			ip link add mv21 link enp0s1 type macvlan mode bridge
-			ip link add mv22 link enp0s1 type macvlan mode bridge
-			ip link add mv23 link enp0s1 type macvlan mode bridge
-			ip link add mv24 link enp0s1 type macvlan mode bridge
-			ip link add mv25 link enp0s1 type macvlan mode bridge
-			ip link add mv26 link enp0s1 type macvlan mode bridge
-			ip link add mv27 link enp0s1 type macvlan mode bridge
-			ip link add mv28 link enp0s1 type macvlan mode bridge
-			ip link add mv29 link enp0s1 type macvlan mode bridge
-			ip link add mv30 link enp0s1 type macvlan mode bridge
-			ip link add mv31 link enp0s1 type macvlan mode bridge
-			ip link add mv32 link enp0s1 type macvlan mode bridge
-			ip link add mv33 link enp0s1 type macvlan mode bridge
-			ip link add mv34 link enp0s1 type macvlan mode bridge
-			ip link add mv35 link enp0s1 type macvlan mode bridge
-			ip link add mv36 link enp0s1 type macvlan mode bridge
-			ip link add mv37 link enp0s1 type macvlan mode bridge
-			ip link add mv38 link enp0s1 type macvlan mode bridge
-			ip link add mv39 link enp0s1 type macvlan mode bridge
-			ip link add mv40 link enp0s1 type macvlan mode bridge
-
-		dhcpcd mv1 &
-		dhcpcd mv2 &
-		dhcpcd mv3 &
-		dhcpcd mv4 &
-		dhcpcd mv5 &
-		dhcpcd mv6 &
-		dhcpcd mv7 &
-		dhcpcd mv8 &
-		dhcpcd mv9 &
-		dhcpcd mv10 &
-		dhcpcd mv11 &
-		dhcpcd mv12 &
-		dhcpcd mv13 &
-		dhcpcd mv14 &
-		dhcpcd mv15 &
-		dhcpcd mv16 &
-		dhcpcd mv17 &
-		dhcpcd mv18 &
-		dhcpcd mv19 &
-		dhcpcd mv20 &
-		dhcpcd mv21 &
-		dhcpcd mv22 &
-		dhcpcd mv23 &
-		dhcpcd mv24 &
-		dhcpcd mv25 &
-		dhcpcd mv26 &
-		dhcpcd mv27 &
-		dhcpcd mv28 &
-		dhcpcd mv29 &
-		dhcpcd mv30 &
-		dhcpcd mv31 &
-		dhcpcd mv32 &
-		dhcpcd mv33 &
-		dhcpcd mv34 &
-		dhcpcd mv35 &
-		dhcpcd mv36 &
-		dhcpcd mv37 &
-		dhcpcd mv38 &
-		dhcpcd mv39 &
-		dhcpcd mv40 &
-
-
-
-
-
-								pixels[x][y] = fmt.Sprintf("PX %d %d %02x%02x%02x\n", x, y, R>>8, G>>8, B>>8)
-						}
-					}*/
+	loadimg("img.png")
+	loadimg("img1.png")
+	loadimg("img2.png")
+	loadimg("img3.png")
+	loadimg("img4.png")
 
 	nwork := 40
 	nconn := 3
@@ -273,10 +170,14 @@ func main() {
 
 				max := int(maxY.Load()) + 1
 
-				for i := 0; i < iters; i++ {
+				for i := 0; i < iters; i++ { // prepare iter buffers
 					startX := rand.Intn(1800)
 
 					startY := rand.Intn(80) + max
+
+					imidx := rand.Intn(len(images))
+					image := images[imidx]
+					size := sizes[imidx]
 
 					for i := 0; i < size.X*size.Y; i++ { // 1900x900
 						x := i % size.X
