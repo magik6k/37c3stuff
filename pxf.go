@@ -50,11 +50,12 @@ func main() {
 		sizes = append(sizes, size)
 	}
 
-	loadimg("img.png")
+	/*loadimg("img.png")
 	loadimg("img1.png")
 	loadimg("img2.png")
 	loadimg("img3.png")
-	loadimg("img4.png")
+	loadimg("img4.png")*/
+	loadimg("img5.png")
 
 	nwork := 40
 	nconn := 3
