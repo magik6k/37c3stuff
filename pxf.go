@@ -169,11 +169,12 @@ func main() {
 				iters := 5
 
 				max := int(maxY.Load()) + 1
+				_ = max
 
 				for i := 0; i < iters; i++ { // prepare iter buffers
 					startX := rand.Intn(1800)
 
-					startY := rand.Intn(80) + max
+					startY := rand.Intn(1000) //+ max
 
 					imidx := rand.Intn(len(images))
 					image := images[imidx]
