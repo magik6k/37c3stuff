@@ -150,6 +150,8 @@ func main() {
 		}
 	}()
 
+	time.Sleep(2 * time.Second)
+
 	for wid := 0; wid < nwork; wid++ {
 		go func(wid int) {
 			//offy := wid
@@ -178,7 +180,7 @@ func main() {
 					image := images[imidx]
 					size := sizes[imidx]
 
-					for i := 0; i < size.X*size.Y; i++ { // 1900x900
+					for i := 0; i < size.X*size.Y; i++ {
 						x := i % size.X
 						y := i / size.X
 
