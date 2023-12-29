@@ -57,8 +57,8 @@ func main() {
 	loadimg("img4.png")*/
 	loadimg("imgt.png")
 
-	nwork := 100
-	nconn := 3
+	nwork := 50
+	nconn := 2
 
 	sources := `151.217.1.229
 151.217.1.228
