@@ -55,7 +55,8 @@ func main() {
 	loadimg("img2.png")
 	loadimg("img3.png")
 	loadimg("img4.png")*/
-	loadimg("imgt.png")
+	loadimg("img6.png")
+	//loadimg("imgt.png")
 
 	nwork := 50
 	nconn := 2
